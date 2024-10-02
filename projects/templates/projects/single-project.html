@@ -1,0 +1,31 @@
+{%extends 'main.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>This is single project</h1> 
+    <h1> {{object.title}} </h1> 
+    <h2>{{object.description}}</h2> 
+    <h3>Tags:</h3>
+    <ul>
+        {% for tag in object.tag.all %}
+            <li>{{ tag.name }}</li>
+        {% empty %}
+            <li>No tags available for this project.</li>
+        {% endfor %}
+    </ul>
+    {% if object.image %}
+    <img src="{{ object.image.url }}" alt="{{ object.name }}" style="width: 30%;">
+    {% else %}
+        <p>No image available for this project.</p>
+    {% endif %}
+</html>
+
+{% endblock content %} 
+
