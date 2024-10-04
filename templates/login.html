@@ -1,0 +1,38 @@
+{% extends 'main.html' %} 
+
+{%block content%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Form </title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="username">Username:</label>
+            {{ form.username }}
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            {{ form.password }}
+        </div>
+        <button type="submit">Login</button>
+    </form>
+    
+
+    {% if error %}
+    <script>
+        // Display a pop-up alert if there is an error
+        alert("{{ error }}");
+    </script>
+    {% endif %}
+    
+    <p>Don't have an account? <a href="{% url 'signup' %}">Sign up here</a></p>
+</body>
+</html>
+
+{%endblock content%} 

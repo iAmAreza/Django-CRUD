@@ -3,10 +3,10 @@ from django.http import HttpResponse
 # Create your views here.
 from .models import Projects
 from django.db import transaction
-
+from django.contrib.auth import authenticate, login
+from .forms import LoginForm
 from .forms import ProjectForm
-
- 
+from .forms import SignUpForm
 
 
 
@@ -72,3 +72,43 @@ def project(request,pk):
     object = Projects.objects.get(id = pk) 
     
     return render(request, 'projects/single-project.html',{'object' : object})   
+
+
+
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            
+            # Authenticate the user
+            user = authenticate(request, username=username, password=password) # means it checks if the given data is valid or not
+            
+            if user is not None:
+                # Log the user in and redirect to the home page
+                login(request, user) #create a session of the user. 
+                return redirect('projects')  # Replace 'home' with the name of your home URL
+            else:
+                # Authentication failed, send error message
+                return render(request, 'login.html', {'form': form, 'error': 'Invalid credentials'})
+
+    else:
+        form = LoginForm()
+    
+    return render(request, 'login.html', {'form': form})
+
+
+def signup_view(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Automatically log in the user after signup
+            return redirect('projects')  # Redirect to home page after signup
+    else:
+        form = SignUpForm()
+    
+    return render(request, 'signup.html', {'form': form})

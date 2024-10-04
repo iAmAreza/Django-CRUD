@@ -1,15 +1,57 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <h2>Home page</h2> 
     <h2>About page</h2> 
     <hr> 
-    <a href="{% url 'createProjectForm' %}">Add Project </a> 
+    <div class="button-container">
+
+        {% if request.user.is_authenticated %}
+            <p>Hello, {{ request.user.username }}!</p>
+            
+            <!-- Add Project button available to logged-in users -->
+            <button>
+                <a href="{% url 'createProjectForm' %}">Add Project</a>
+            </button>
+    
+            <!-- Logout button available to logged-in users -->
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <div>
+                    <button type="submit" class="log-out" >Logout</button>
+                </div>
+               
+            </form>
+        
+        {% else %}
+            <!-- Signup and Login buttons for non-logged-in users -->
+            <div class="sign-up">
+                <button>
+                    <a href="{% url 'signup' %}">Sign Up</a>
+                </button>
+            </div>
+        
+            <div class="log-in">
+                <button>
+                    <a href="{% url 'login' %}">Log In</a>
+                </button>
+            </div>
+        
+        {% endif %}
+    </div>
+    
     <hr>
 </body>
 </html>
+
+
+
